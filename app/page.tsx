@@ -18,6 +18,7 @@ import {
 import ScrollPortrait from "./components/ScrollPortrait";
 import Reveal from "./components/Reveal";
 import CountUp from "./components/CountUp";
+import ThemeSwitcher from "./components/ThemeSwitcher";
 
 const focus = [
   "Generative AI", "RAG", "Agentic AI", "AI Agents", "LangGraph", "MCP",
@@ -102,17 +103,20 @@ export default function Home() {
   return (
     <main>
       <header className="shell sticky top-0 z-50 pt-4">
-        <nav className="card flex items-center justify-between px-4 py-3 shadow-glow sm:px-5">
-          <a href="#top" className="font-semibold tracking-tight text-white">NAVOD PM</a>
+        <nav className="card flex items-center justify-between gap-3 px-4 py-3 shadow-glow sm:px-5">
+          <a href="#top" className="shrink-0 font-semibold tracking-tight text-white">NAVOD PM</a>
           <div className="hidden items-center gap-6 text-sm text-slate-400 md:flex">
             <a href="#about" className="hover:text-white">About</a>
             <a href="#ai" className="hover:text-white">AI Focus</a>
             <a href="#projects" className="hover:text-white">Projects</a>
             <a href="#experience" className="hover:text-white">Experience</a>
           </div>
-          <a href="mailto:navodthalassery@gmail.com" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-sky-100">
-            Contact
-          </a>
+          <div className="flex items-center gap-2">
+            <ThemeSwitcher />
+            <a href="mailto:navodthalassery@gmail.com" className="hidden rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-sky-100 sm:inline-flex">
+              Contact
+            </a>
+          </div>
         </nav>
       </header>
 
