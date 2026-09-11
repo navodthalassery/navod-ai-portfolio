@@ -171,7 +171,7 @@ export default function ProjectsCarousel({
         </div>
       </div>
 
-      <div className="mt-5 hidden justify-end gap-2 lg:flex">
+      <div className="mt-5 flex justify-end gap-2">
         <button
           type="button"
           aria-label="Previous project"

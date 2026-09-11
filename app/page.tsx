@@ -94,31 +94,35 @@ export default function Home() {
       <section id="top" className="shell relative flex min-h-[88vh] items-center overflow-hidden py-20 sm:py-28">
         <div className="relative z-10 grid w-full items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
           <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 text-sm text-sky-200">
+            <Reveal className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 text-sm text-sky-200">
               <Sparkles size={15} /> {t.hero.badge}
-            </div>
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.03] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
-              {t.hero.titlePrefix}{" "}
-              <span className="bg-gradient-to-r from-sky-300 via-sky-200 to-indigo-300 bg-clip-text text-transparent">
-                {t.hero.titleHighlight}
-              </span>
-            </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
-              {t.hero.subtitle}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h1 className="max-w-4xl text-5xl font-semibold leading-[1.03] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
+                {t.hero.titlePrefix}{" "}
+                <span className="bg-gradient-to-r from-sky-300 via-sky-200 to-indigo-300 bg-clip-text text-transparent">
+                  {t.hero.titleHighlight}
+                </span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
+                {t.hero.subtitle}
+              </p>
+            </Reveal>
+            <Reveal delay={0.3} className="mt-8 flex flex-wrap gap-3">
               <a href="#projects" className="inline-flex items-center gap-2 rounded-xl bg-sky-300 px-5 py-3 font-medium text-slate-950 transition hover:bg-sky-200">
                 {t.hero.viewProjects} <ArrowRight size={18} />
               </a>
               <a href="/NAVOD_PM_CV_UAE.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 font-medium text-white transition hover:bg-white/[0.08]">
                 <Download size={18} /> {t.hero.downloadCv}
               </a>
-            </div>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-500">
+            </Reveal>
+            <Reveal delay={0.4} className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-500">
               <span className="flex items-center gap-2"><MapPin size={15} /> {t.hero.location}</span>
               <a className="flex items-center gap-2 hover:text-slate-300" href="https://www.linkedin.com/in/navod-p-m-50451754/" target="_blank" rel="noreferrer"><Linkedin size={15} /> {t.hero.linkedin}</a>
               <a className="flex items-center gap-2 hover:text-slate-300" href="mailto:navodthalassery@gmail.com"><Mail size={15} /> {t.hero.email}</a>
-            </div>
+            </Reveal>
           </div>
 
           <div className="flex flex-col items-stretch gap-4">
