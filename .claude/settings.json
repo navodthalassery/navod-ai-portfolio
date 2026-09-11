@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__openchatcut__openchatcut_status",
+      "mcp__Claude_Browser__get_page_text",
+      "mcp__Claude_Browser__find"
+    ]
+  }
+}
