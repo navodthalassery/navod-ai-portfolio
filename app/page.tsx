@@ -259,26 +259,4 @@ export default function Home() {
 
       <section className="shell pb-24">
         <Reveal className="card overflow-hidden p-8 sm:p-12">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="eyebrow">Let’s connect</p>
-              <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">Looking for senior engineering roles where enterprise software meets practical AI.</h2>
-              <p className="mt-4 max-w-2xl leading-7 text-slate-400">Open to Enterprise AI, Agentic AI, Full-Stack AI, AI Integration, Azure AI and Applied AI opportunities.</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <a href="mailto:navodthalassery@gmail.com" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-medium text-slate-950"><Mail size={18}/> Email me</a>
-              <a href="https://www.linkedin.com/in/navod-p-m-50451754/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-3 font-medium text-white"><Linkedin size={18}/> LinkedIn <ExternalLink size={15}/></a>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      <footer className="border-t border-white/5 py-8">
-        <div className="shell flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 Navod PM</span>
-          <span>Next.js · TypeScript · Tailwind CSS · Database-free V1</span>
-        </div>
-      </footer>
-    </main>
-  );
-}
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg
