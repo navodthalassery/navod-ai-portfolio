@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Bot,
@@ -23,6 +24,7 @@ import CountUp from "./components/CountUp";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import ProjectsCarousel from "./components/ProjectsCarousel";
+import ScrollToTop from "./components/ScrollToTop";
 import { useLanguage } from "./lib/LanguageProvider";
 import { translations, focusTags, foundationTags, projectTech, projectDemoUrls } from "./lib/translations";
 
@@ -43,16 +45,45 @@ export default function Home() {
   const { lang } = useLanguage();
   const t = translations[lang];
 
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const ids = ["about", "ai", "projects", "experience"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+    const elements = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  const navLinks = [
+    ["about", t.nav.about],
+    ["ai", t.nav.aiFocus],
+    ["projects", t.nav.projects],
+    ["experience", t.nav.experience],
+  ] as const;
+
   return (
     <main>
       <header className="shell sticky top-0 z-50 pt-4">
         <nav className="card flex items-center justify-between gap-3 px-4 py-3 shadow-glow sm:px-5">
-          <a href="#top" className="shrink-0 font-semibold tracking-tight text-white">NAVOD PM</a>
+          <a href="#top" className="shrink-0 whitespace-nowrap font-semibold tracking-tight text-white">NAVOD PM</a>
           <div className="hidden items-center gap-6 text-sm text-slate-400 md:flex">
-            <a href="#about" className="hover:text-white">{t.nav.about}</a>
-            <a href="#ai" className="hover:text-white">{t.nav.aiFocus}</a>
-            <a href="#projects" className="hover:text-white">{t.nav.projects}</a>
-            <a href="#experience" className="hover:text-white">{t.nav.experience}</a>
+            {navLinks.map(([id, label]) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className={`transition-colors hover:text-white ${activeSection === id ? "font-semibold text-sky-300" : ""}`}
+              >
+                {label}
+              </a>
+            ))}
           </div>
           <a href="mailto:navodthalassery@gmail.com" className="hidden rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-sky-100 sm:inline-flex">
             {t.nav.contact}
@@ -209,6 +240,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <ScrollToTop />
     </main>
   );
 }

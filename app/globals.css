@@ -15,17 +15,6 @@ body {
 
 html[dir="rtl"] body { font-family: var(--font-arabic), var(--font-sans, ui-sans-serif), system-ui, sans-serif; }
 
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.marquee-track {
-  animation-name: marquee-scroll;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-.marquee-paused { animation-play-state: paused; }
-
 @layer components {
   .shell { @apply mx-auto w-full max-w-6xl px-5 sm:px-8; }
   .card { @apply rounded-2xl border border-white/10 bg-white/[0.035] backdrop-blur; }
