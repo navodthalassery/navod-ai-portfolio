@@ -20,16 +20,26 @@ body {
   .tag { @apply rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-slate-300; }
 }
 
+header a[href^="mailto:"] {
+  display: inline-flex !important;
+}
+
 .theme-switcher {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
   display: inline-flex;
   min-height: 40px;
   align-items: center;
   gap: .4rem;
   border: 1px solid rgba(255,255,255,.1);
   border-radius: .75rem;
-  background: rgba(255,255,255,.04);
+  background: rgba(255,255,255,.08);
   padding: 0 .55rem 0 .7rem;
   color: rgb(203 213 225);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
 }
 .theme-switcher select {
   cursor: pointer;
@@ -65,7 +75,7 @@ html[data-theme="light"] .text-slate-600 { color: #64748b !important; }
 html[data-theme="light"] .tag,
 html[data-theme="light"] .theme-switcher {
   border-color: rgba(15,23,42,.12);
-  background: rgba(255,255,255,.75);
+  background: rgba(255,255,255,.86);
   color: #334155;
 }
 html[data-theme="light"] section[class*="bg-white"] { background: rgba(255,255,255,.42) !important; }
@@ -82,7 +92,7 @@ html[data-theme="gradient"] .card {
   background: rgba(11,16,39,.55) !important;
 }
 html[data-theme="gradient"] .eyebrow { color: #c4b5fd !important; }
-html[data-theme="gradient"] .theme-switcher { background: rgba(30,27,75,.72); }
+html[data-theme="gradient"] .theme-switcher { background: rgba(30,27,75,.82); }
 
 /* Nature */
 html[data-theme="nature"] body {
@@ -99,7 +109,7 @@ html[data-theme="nature"] .eyebrow,
 html[data-theme="nature"] .text-sky-300,
 html[data-theme="nature"] .text-sky-200 { color: #6ee7b7 !important; }
 html[data-theme="nature"] .bg-sky-300 { background-color: #5eead4 !important; }
-html[data-theme="nature"] .theme-switcher { background: rgba(6,78,59,.35); }
+html[data-theme="nature"] .theme-switcher { background: rgba(6,78,59,.72); }
 
 /* Minimal */
 html[data-theme="minimal"] { color-scheme: light; }
@@ -138,8 +148,12 @@ html[data-theme="creative"] .eyebrow,
 html[data-theme="creative"] .text-sky-300,
 html[data-theme="creative"] .text-sky-200 { color: #fb923c !important; }
 html[data-theme="creative"] .bg-sky-300 { background-color: #fb923c !important; }
-html[data-theme="creative"] .theme-switcher { background: rgba(124,45,18,.32); }
+html[data-theme="creative"] .theme-switcher { background: rgba(124,45,18,.72); }
 
 @media (max-width: 640px) {
+  .theme-switcher {
+    right: .75rem;
+    bottom: .75rem;
+  }
   .theme-switcher select { width: 4.6rem; }
 }
