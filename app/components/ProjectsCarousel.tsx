@@ -35,6 +35,7 @@ export default function ProjectsCarousel({
   const halfWidthRef = useRef(0);
   const cardStepRef = useRef(0);
   const draggingRef = useRef(false);
+  const hoveringRef = useRef(false);
   const pointerStartXRef = useRef(0);
   const startOffsetRef = useRef(0);
   const movedRef = useRef(0);
@@ -78,7 +79,7 @@ export default function ProjectsCarousel({
         offsetRef.current = mod(from + (to - from) * easeInOutCubic(progress), halfWidthRef.current);
         applyTransform();
         if (progress >= 1) nudgeRef.current = null;
-      } else if (!draggingRef.current && halfWidthRef.current > 0) {
+      } else if (!draggingRef.current && !hoveringRef.current && halfWidthRef.current > 0) {
         offsetRef.current = mod(offsetRef.current + AUTO_SPEED_PX_PER_SEC * dt, halfWidthRef.current);
         applyTransform();
       }
@@ -125,7 +126,11 @@ export default function ProjectsCarousel({
 
   return (
     <div className="relative">
-      <div className="overflow-hidden">
+      <div
+        className="overflow-hidden"
+        onMouseEnter={() => (hoveringRef.current = true)}
+        onMouseLeave={() => (hoveringRef.current = false)}
+      >
         <div
           ref={trackRef}
           onPointerDown={handlePointerDown}
