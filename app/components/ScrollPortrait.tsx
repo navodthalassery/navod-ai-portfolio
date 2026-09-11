@@ -9,17 +9,19 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { usePrefersReducedMotion } from "../lib/usePrefersReducedMotion";
 
 export default function ScrollPortrait() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const reduced = usePrefersReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const scrollY = useTransform(scrollYProgress, [0, 1], [-16, 24]);
-  const scrollRotate = useTransform(scrollYProgress, [0, 1], [-4, 6]);
+  const scrollY = useTransform(scrollYProgress, (v) => (reduced ? 0 : -16 + v * 40));
+  const scrollRotate = useTransform(scrollYProgress, (v) => (reduced ? 0 : -4 + v * 10));
 
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
@@ -35,6 +37,7 @@ export default function ScrollPortrait() {
   const glowY = useTransform(pointerY, [-0.5, 0.5], ["20%", "80%"]);
 
   function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (reduced) return;
     const rect = cardRef.current?.getBoundingClientRect();
     if (!rect) return;
     pointerX.set((e.clientX - rect.left) / rect.width - 0.5);

@@ -2,6 +2,7 @@
 
 import { animate, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { usePrefersReducedMotion } from "../lib/usePrefersReducedMotion";
 
 export default function CountUp({ value }: { value: string }) {
   const match = value.match(/^(\d+)(.*)$/);
@@ -11,17 +12,22 @@ export default function CountUp({ value }: { value: string }) {
 
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const reduced = usePrefersReducedMotion();
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!isInView || !hasNumber) return;
+    if (reduced) {
+      setDisplay(target);
+      return;
+    }
     const controls = animate(0, target, {
       duration: 1.1,
       ease: "easeOut",
       onUpdate: (v) => setDisplay(Math.round(v)),
     });
     return () => controls.stop();
-  }, [isInView, target, hasNumber]);
+  }, [isInView, target, hasNumber, reduced]);
 
   return (
     <span ref={ref}>

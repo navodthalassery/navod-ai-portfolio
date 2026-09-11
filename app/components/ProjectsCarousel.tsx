@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, ExternalLink, type LucideIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "../lib/usePrefersReducedMotion";
 
 type Project = { title: string; badge: string; description: string };
 
@@ -30,6 +31,7 @@ export default function ProjectsCarousel({
   demoUrls: readonly (string | null)[];
   viewLiveLabel: string;
 }) {
+  const reduced = usePrefersReducedMotion();
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);
   const halfWidthRef = useRef(0);
@@ -79,7 +81,7 @@ export default function ProjectsCarousel({
         offsetRef.current = mod(from + (to - from) * easeInOutCubic(progress), halfWidthRef.current);
         applyTransform();
         if (progress >= 1) nudgeRef.current = null;
-      } else if (!draggingRef.current && !hoveringRef.current && halfWidthRef.current > 0) {
+      } else if (!reduced && !draggingRef.current && !hoveringRef.current && halfWidthRef.current > 0) {
         offsetRef.current = mod(offsetRef.current + AUTO_SPEED_PX_PER_SEC * dt, halfWidthRef.current);
         applyTransform();
       }
@@ -87,7 +89,7 @@ export default function ProjectsCarousel({
     }
     rafId = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(rafId);
-  }, []);
+  }, [reduced]);
 
   function nudge(dir: 1 | -1) {
     if (!cardStepRef.current) return;
