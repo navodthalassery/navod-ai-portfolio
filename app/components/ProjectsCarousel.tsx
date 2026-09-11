@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, ExternalLink, type LucideIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { usePrefersReducedMotion } from "../lib/usePrefersReducedMotion";
+import { useLanguage } from "../lib/LanguageProvider";
 
 type Project = { title: string; badge: string; description: string };
 
@@ -32,6 +33,8 @@ export default function ProjectsCarousel({
   viewLiveLabel: string;
 }) {
   const reduced = usePrefersReducedMotion();
+  const { lang } = useLanguage();
+  const isRtl = lang === "ar";
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);
   const halfWidthRef = useRef(0);
@@ -48,7 +51,7 @@ export default function ProjectsCarousel({
 
   function applyTransform() {
     if (trackRef.current) {
-      trackRef.current.style.transform = `translateX(-${offsetRef.current}px)`;
+      trackRef.current.style.transform = `translate3d(-${offsetRef.current}px, 0, 0)`;
     }
   }
 
@@ -62,17 +65,27 @@ export default function ProjectsCarousel({
         const gap = parseFloat(getComputedStyle(track).columnGap || "0");
         cardStepRef.current = firstCard.offsetWidth + gap;
       }
+      if (halfWidthRef.current > 0) {
+        offsetRef.current = mod(offsetRef.current, halfWidthRef.current);
+        applyTransform();
+      }
     }
-    measure();
+
+    const raf = requestAnimationFrame(measure);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [items.length]);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", measure);
+    };
+  }, [items.length, lang]);
 
   useEffect(() => {
     let rafId: number;
+    lastTsRef.current = null;
+
     function frame(ts: number) {
       if (lastTsRef.current == null) lastTsRef.current = ts;
-      const dt = (ts - lastTsRef.current) / 1000;
+      const dt = Math.min((ts - lastTsRef.current) / 1000, 0.05);
       lastTsRef.current = ts;
 
       if (nudgeRef.current) {
@@ -87,13 +100,18 @@ export default function ProjectsCarousel({
       }
       rafId = requestAnimationFrame(frame);
     }
+
     rafId = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(rafId);
-  }, [reduced]);
+  }, [reduced, lang]);
 
   function nudge(dir: 1 | -1) {
-    if (!cardStepRef.current) return;
-    nudgeRef.current = { from: offsetRef.current, to: offsetRef.current + dir * cardStepRef.current, start: performance.now() };
+    if (!cardStepRef.current || !halfWidthRef.current) return;
+    nudgeRef.current = {
+      from: offsetRef.current,
+      to: offsetRef.current + dir * cardStepRef.current,
+      start: performance.now(),
+    };
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
@@ -126,21 +144,26 @@ export default function ProjectsCarousel({
     }
   }
 
+  const PreviousIcon = isRtl ? ChevronRight : ChevronLeft;
+  const NextIcon = isRtl ? ChevronLeft : ChevronRight;
+
   return (
     <div className="relative">
       <div
         className="overflow-hidden"
+        dir="ltr"
         onMouseEnter={() => (hoveringRef.current = true)}
         onMouseLeave={() => (hoveringRef.current = false)}
       >
         <div
           ref={trackRef}
+          dir="ltr"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
           onClickCapture={handleClickCapture}
-          className="flex w-max select-none gap-5 [touch-action:pan-y]"
+          className="flex w-max select-none gap-5 [touch-action:pan-y] will-change-transform"
           style={{ cursor: "grab" }}
         >
           {doubled.map((project, idx) => {
@@ -148,8 +171,12 @@ export default function ProjectsCarousel({
             const Icon = icons[i];
             const demoUrl = demoUrls[i];
             return (
-              <div key={`${project.title}-${idx}`} className="w-[280px] shrink-0 sm:w-[320px]">
-                <article className="card flex h-full flex-col p-6 transition hover:border-sky-400/25 hover:bg-white/[0.05]">
+              <div
+                key={`${project.title}-${idx}`}
+                className="w-[280px] shrink-0 sm:w-[320px]"
+                dir={isRtl ? "rtl" : "ltr"}
+              >
+                <article className="card flex h-full flex-col p-6 text-start transition hover:border-sky-400/25 hover:bg-white/[0.05]">
                   <div className="flex items-center justify-between gap-3">
                     <Icon className="text-sky-300" />
                     <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs text-slate-400">{project.badge}</span>
@@ -178,22 +205,22 @@ export default function ProjectsCarousel({
         </div>
       </div>
 
-      <div className="mt-5 flex justify-end gap-2">
+      <div className="mt-5 flex justify-end gap-2" dir={isRtl ? "rtl" : "ltr"}>
         <button
           type="button"
-          aria-label="Previous project"
+          aria-label={isRtl ? "المشروع السابق" : "Previous project"}
           onClick={() => nudge(-1)}
           className="card flex h-10 w-10 items-center justify-center rounded-full transition hover:border-sky-400/25"
         >
-          <ChevronLeft size={18} />
+          <PreviousIcon size={18} />
         </button>
         <button
           type="button"
-          aria-label="Next project"
+          aria-label={isRtl ? "المشروع التالي" : "Next project"}
           onClick={() => nudge(1)}
           className="card flex h-10 w-10 items-center justify-center rounded-full transition hover:border-sky-400/25"
         >
-          <ChevronRight size={18} />
+          <NextIcon size={18} />
         </button>
       </div>
     </div>
