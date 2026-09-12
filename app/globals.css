@@ -13,6 +13,50 @@ body {
 }
 ::selection { background: rgba(56,189,248,.28); }
 
+/* Decorative 3D media stays behind existing content and does not intercept input. */
+.hero-with-video { isolation: isolate; }
+.hero-video-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: .48;
+  background: url('/media/navod-ai-background-poster.jpg') center / cover no-repeat;
+  mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 78%, transparent);
+}
+.hero-video-layer video { width: 100%; height: 100%; object-fit: cover; }
+.hero-video-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #090a20 0%, rgba(9,10,32,.8) 36%, transparent 80%);
+}
+html[dir="rtl"] .hero-video-layer { transform: scaleX(-1); }
+.hero-video-control {
+  position: absolute;
+  inset-inline-end: 2rem;
+  bottom: 1.25rem;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .65rem .85rem;
+  border: 1px solid rgba(148,163,184,.3);
+  border-radius: .75rem;
+  background: rgba(9,12,28,.9);
+  color: #dbeafe;
+  font-size: .75rem;
+}
+.hero-video-control:hover { border-color: #7dd3fc; }
+.hero-video-control:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 4px; }
+.hero-video-control:disabled { cursor: default; opacity: .7; }
+html[data-theme="light"] .hero-video-layer,
+html[data-theme="minimal"] .hero-video-layer { opacity: .08; }
+@media (max-width: 767px) {
+  .hero-video-layer { opacity: .2; }
+  .hero-video-control { inset-inline-end: 1.25rem; }
+}
+
 html[dir="rtl"] body {
   font-family: var(--font-arabic), var(--font-sans, ui-sans-serif), system-ui, sans-serif;
 }
