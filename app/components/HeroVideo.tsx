@@ -9,9 +9,15 @@ const labels = {
   ar: { play: "تشغيل حركة الخلفية", pause: "إيقاف حركة الخلفية مؤقتًا", error: "الحركة غير متاحة" },
 };
 
-export default function HeroVideo() {
+const portraitLabels = {
+  en: { play: "Play portrait animation", pause: "Pause portrait animation", error: "Portrait animation unavailable" },
+  ar: { play: "تشغيل حركة الصورة الشخصية", pause: "إيقاف حركة الصورة الشخصية مؤقتًا", error: "حركة الصورة الشخصية غير متاحة" },
+};
+
+export default function HeroVideo({ variant = "background" }: { variant?: "background" | "portrait" }) {
   const { lang } = useLanguage();
-  const text = labels[lang];
+  const portrait = variant === "portrait";
+  const text = (portrait ? portraitLabels : labels)[lang];
   const videoRef = useRef<HTMLVideoElement>(null);
   const toggleRef = useRef<() => void>(() => {});
   const [playing, setPlaying] = useState(false);
@@ -33,7 +39,7 @@ export default function HeroVideo() {
         return;
       }
       if (!video.getAttribute("src")) {
-        video.src = mobile.matches ? "/media/navod-ai-background-mobile.mp4" : "/media/navod-ai-background.mp4";
+        video.src = portrait ? "/media/navod-portrait-live.mp4" : mobile.matches ? "/media/navod-ai-background-mobile.mp4" : "/media/navod-ai-background.mp4";
         video.load();
       }
       void video.play().then(() => {
@@ -65,15 +71,15 @@ export default function HeroVideo() {
       mobile.removeEventListener("change", onPolicyChange);
       toggleRef.current = () => {};
     };
-  }, []);
+  }, [portrait]);
 
   return (
     <>
-      <div className="hero-video-layer" aria-hidden="true">
+      <div className={portrait ? "portrait-video-layer" : "hero-video-layer"} aria-hidden="true">
         <video
           ref={videoRef}
           muted loop playsInline preload="none"
-          poster="/media/navod-ai-background-poster.jpg"
+          poster={portrait ? "/navod-portrait.png" : "/media/navod-ai-background-poster.jpg"}
           tabIndex={-1}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
@@ -83,7 +89,7 @@ export default function HeroVideo() {
       </div>
       <button
         type="button"
-        className="hero-video-control"
+        className={portrait ? "hero-video-control portrait-video-control" : "hero-video-control"}
         aria-pressed={playing}
         disabled={failed}
         onClick={() => toggleRef.current()}

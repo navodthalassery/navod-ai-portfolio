@@ -39,3 +39,5 @@ The portfolio deliberately separates:
 - **Current AI focus** — technologies actively being learned/built with and not represented as long-term production experience.
 
 As AI projects are completed, move technologies from `Current AI focus` into concrete project case studies.
+
+The portrait card also includes an original AI-animated five-second blink-and-smile clip (about 1.2 MB). It reuses the background playback component, with independent English/Arabic controls and static-image fallback; mobile, reduced-motion, and data-saving preferences prevent automatic video loading. The original portrait remains the accessible image beneath the decorative video.

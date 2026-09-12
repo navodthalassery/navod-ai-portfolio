@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import HeroVideo from "./HeroVideo";
 import { useRef } from "react";
 import {
   motion,
@@ -73,6 +74,7 @@ export default function ScrollPortrait() {
             className="object-cover"
             style={{ objectPosition: "50% 24%" }}
           />
+          <HeroVideo variant="portrait" />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
