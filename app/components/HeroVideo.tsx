@@ -26,18 +26,20 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mobile = window.matchMedia("(max-width: 767px)");
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+
     let wanted = !reduced.matches && !mobile.matches && !connection?.saveData;
     let visible = false;
     let disposed = false;
 
     const showPoster = () => {
+      setPlaying(false);
       video.pause();
       video.removeAttribute("src");
       video.load();
-      setPlaying(false);
     };
 
     const reconcile = () => {
@@ -45,24 +47,40 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
         showPoster();
         return;
       }
+
       if (!video.getAttribute("src")) {
-        video.src = portrait ? "/media/navod-portrait-live.mp4" : mobile.matches ? "/media/navod-ai-background-mobile.mp4" : "/media/navod-ai-background.mp4";
+        video.src = portrait
+          ? "/media/navod-portrait-live.mp4"
+          : mobile.matches
+            ? "/media/navod-ai-background-mobile.mp4"
+            : "/media/navod-ai-background.mp4";
         video.load();
       }
-      void video.play().then(() => {
-        if (disposed || !wanted || !visible || document.hidden) {
-          showPoster();
-        } else {
+
+      void video.play()
+        .then(() => {
+          if (disposed || !wanted || !visible || document.hidden) {
+            showPoster();
+            return;
+          }
           setPlaying(true);
-        }
-      }).catch(() => {
-        setPlaying(false);
-        // A rejected autoplay request leaves the poster and manual play control available.
-      });
+        })
+        .catch(() => {
+          setPlaying(false);
+        });
     };
 
     toggleRef.current = () => {
       wanted = !wanted;
+
+      // Update the control immediately so iOS media events cannot leave
+      // the visible label/icon stuck on the previous state.
+      if (!wanted) {
+        setPlaying(false);
+        showPoster();
+        return;
+      }
+
       reconcile();
     };
 
@@ -70,17 +88,23 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
       if (reduced.matches || mobile.matches) wanted = false;
       reconcile();
     };
-    const observer = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      reconcile();
-    }, { threshold: 0 });
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        reconcile();
+      },
+      { threshold: 0 }
+    );
+
     observer.observe(video);
     document.addEventListener("visibilitychange", reconcile);
     reduced.addEventListener("change", onPolicyChange);
     mobile.addEventListener("change", onPolicyChange);
+
     return () => {
       disposed = true;
-      showPoster();
+      video.pause();
       observer.disconnect();
       document.removeEventListener("visibilitychange", reconcile);
       reduced.removeEventListener("change", onPolicyChange);
@@ -94,12 +118,16 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
       <div className={portrait ? "portrait-video-layer" : "hero-video-layer"} aria-hidden="true">
         <video
           ref={videoRef}
-          muted loop playsInline preload="none"
+          muted
+          loop
+          playsInline
+          preload="none"
           poster={portrait ? "/navod-portrait.png" : "/media/navod-ai-background-poster.jpg"}
           tabIndex={-1}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onError={() => { setFailed(true); setPlaying(false); }}
+          onError={() => {
+            setFailed(true);
+            setPlaying(false);
+          }}
           className={failed ? "invisible" : undefined}
         />
       </div>
