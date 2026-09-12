@@ -37,6 +37,7 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
       video.pause();
       video.removeAttribute("src");
       video.load();
+      setPlaying(false);
     };
 
     const reconcile = () => {
@@ -49,13 +50,22 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
         video.load();
       }
       void video.play().then(() => {
-        if (disposed || !wanted || !visible || document.hidden) showPoster();
+        if (disposed || !wanted || !visible || document.hidden) {
+          showPoster();
+        } else {
+          setPlaying(true);
+        }
       }).catch(() => {
+        setPlaying(false);
         // A rejected autoplay request leaves the poster and manual play control available.
       });
     };
 
-    toggleRef.current = () => { wanted = video.paused; reconcile(); };
+    toggleRef.current = () => {
+      wanted = !wanted;
+      reconcile();
+    };
+
     const onPolicyChange = () => {
       if (reduced.matches || mobile.matches) wanted = false;
       reconcile();
