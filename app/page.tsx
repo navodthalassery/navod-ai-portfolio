@@ -25,6 +25,7 @@ import ThemeSwitcher from "./components/ThemeSwitcher";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import ProjectsCarousel from "./components/ProjectsCarousel";
 import ScrollToTop from "./components/ScrollToTop";
+import HeroVideo from "./components/HeroVideo";
 import { useLanguage } from "./lib/LanguageProvider";
 import { translations, focusTags, foundationTags, projectTech, projectDemoUrls } from "./lib/translations";
 
@@ -91,7 +92,8 @@ export default function Home() {
         </nav>
       </header>
 
-      <section id="top" className="shell relative flex min-h-[88vh] items-center overflow-hidden py-20 sm:py-28">
+      <section id="top" className="shell hero-with-video relative flex min-h-[88vh] items-center overflow-hidden py-20 sm:py-28">
+        <HeroVideo />
         <div className="relative z-10 grid w-full items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
           <div>
             <Reveal className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 text-sm text-sky-200">
