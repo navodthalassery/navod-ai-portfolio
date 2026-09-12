@@ -5,13 +5,13 @@ import { Pause, Play } from "lucide-react";
 import { useLanguage } from "../lib/LanguageProvider";
 
 const labels = {
-  en: { play: "Play background animation", pause: "Pause background animation", error: "Animation unavailable" },
-  ar: { play: "تشغيل حركة الخلفية", pause: "إيقاف حركة الخلفية مؤقتًا", error: "الحركة غير متاحة" },
+  en: { play: "Play", pause: "Pause", error: "Animation unavailable" },
+  ar: { play: "تشغيل", pause: "إيقاف مؤقت", error: "الحركة غير متاحة" },
 };
 
 const portraitLabels = {
-  en: { play: "Play portrait animation", pause: "Pause portrait animation", error: "Portrait animation unavailable" },
-  ar: { play: "تشغيل حركة الصورة الشخصية", pause: "إيقاف حركة الصورة الشخصية مؤقتًا", error: "حركة الصورة الشخصية غير متاحة" },
+  en: { play: "Play", pause: "Pause", error: "Portrait animation unavailable" },
+  ar: { play: "تشغيل", pause: "إيقاف مؤقت", error: "حركة الصورة الشخصية غير متاحة" },
 };
 
 export default function HeroVideo({ variant = "background" }: { variant?: "background" | "portrait" }) {
