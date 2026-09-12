@@ -33,9 +33,15 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
     let visible = false;
     let disposed = false;
 
+    const showPoster = () => {
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+    };
+
     const reconcile = () => {
       if (disposed || !wanted || !visible || document.hidden) {
-        video.pause();
+        showPoster();
         return;
       }
       if (!video.getAttribute("src")) {
@@ -43,7 +49,7 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
         video.load();
       }
       void video.play().then(() => {
-        if (disposed || !wanted || !visible || document.hidden) video.pause();
+        if (disposed || !wanted || !visible || document.hidden) showPoster();
       }).catch(() => {
         // A rejected autoplay request leaves the poster and manual play control available.
       });
@@ -64,7 +70,7 @@ export default function HeroVideo({ variant = "background" }: { variant?: "backg
     mobile.addEventListener("change", onPolicyChange);
     return () => {
       disposed = true;
-      video.pause();
+      showPoster();
       observer.disconnect();
       document.removeEventListener("visibilitychange", reconcile);
       reduced.removeEventListener("change", onPolicyChange);
